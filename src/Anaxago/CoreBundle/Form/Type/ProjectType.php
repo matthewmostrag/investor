@@ -4,7 +4,6 @@ namespace Anaxago\CoreBundle\Form\Type;
 
 use Anaxago\CoreBundle\Entity\Project;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,11 +23,7 @@ class ProjectType extends AbstractType
         $builder
             ->add('slug')
             ->add('title')
-            ->add('description')
-            ->add('save', SubmitType::class, [
-                'label' => 'Ajouter le projet',
-                'attr' => ['class' => 'btn btn-success']
-            ]);
+            ->add('description');
     }
 
     /**

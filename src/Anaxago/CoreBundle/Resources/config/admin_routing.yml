@@ -5,3 +5,8 @@ anaxago_core_admin_index:
 anaxago_core_admin_project_add:
     path: /projets/ajouter
     defaults: { _controller: AnaxagoCoreBundle:Project:create }
+
+anaxago_core_admin_project_edit:
+    path: /projets/{project}/modifier
+    defaults: { _controller: AnaxagoCoreBundle:Project:edit }
+    requirements: { project: \d+ }
