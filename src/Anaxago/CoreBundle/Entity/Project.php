@@ -3,6 +3,7 @@
 namespace Anaxago\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Project
@@ -25,6 +26,9 @@ class Project
      * @var string
      *
      * @ORM\Column(name="slug", type="string", length=255)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Regex("/^[a-z0-9]+(?:-[a-z0-9]+)*$/")
      */
     private $slug;
 
@@ -32,6 +36,9 @@ class Project
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(min=3, minMessage="Le titre doit contenir au moins 3 caractères")
      */
     private $title;
 
@@ -39,6 +46,9 @@ class Project
      * @var string
      *
      * @ORM\Column(name="description", type="text")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(min=10, minMessage="La description doit contenir au moins 10 caractères")
      */
     private $description;
 
