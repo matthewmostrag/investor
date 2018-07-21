@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section>
+        <div class="container">
+            <h1 class="my-5">Liste des projets</h1>
+            {% for project in projects %}
+                {% if loop.first or loop.index0 % 3 == 0 %}
+                    <div class="row">
+                {% endif %}
+                <div class="col-md-4">
+                    <div class="card">
+                        <img class="card-img-top" src="https://picsum.photos/360/240/?random" alt="project">
+                        <div class="card-body">
+                            <h5>{{ project.title }}</h5>
+                            <p class="card-text">
+                                {{ project.description }}
+                            </p>
+                            <a href="#" class="btn btn-outline-primary">Modifier</a>
+                            <a href="#" class="btn btn-outline-danger">Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+                {% if not loop.first and (loop.last or loop.index % 3 == 0 ) %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

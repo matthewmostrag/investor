@@ -1,0 +1,3 @@
+anaxago_core_admin_index:
+    path: /
+    defaults: { _controller: AnaxagoCoreBundle:Admin:index }

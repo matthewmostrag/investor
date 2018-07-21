@@ -1,3 +1,7 @@
 anaxago_core_homepage:
     path:     /
     defaults: { _controller: AnaxagoCoreBundle:Default:index }
+
+anaxago_core_admin:
+    resource: "@AnaxagoCoreBundle/Resources/config/admin_routing.yml"
+    prefix:   /admin

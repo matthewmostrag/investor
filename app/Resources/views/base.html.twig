@@ -21,14 +21,17 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="nav justify-content-end w-100">
+                <ul class="nav justify-content-end w-100 align-items-center">
                     {% if not app.user %}
                         <li><a href="{{ path('login') }}" class="btn btn-outline-success my-2 my-sm-0">Se connecter</a>
                         </li>
                         <li><a href="{{ path('anaxago_core_registration') }}"
                                class="btn btn-outline-primary my-2 my-sm-0 ml-2">S'enregistrer</a></li>
                     {% else %}
-                        <li><p>Bonjour {{ app.user.fullName }}</p></li>
+                        <li>Bonjour {{ app.user.fullName }}</li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('anaxago_core_admin_index') }}" class="btn btn-outline-success my-2 my-sm-0 ml-2">Administration</a></li>
+                        {% endif %}
                         <li><a class="btn btn-outline-primary my-2 my-sm-0 ml-2"
                                href="{{ path('logout') }}">Déconnexion</a></li>
                     {% endif %}
