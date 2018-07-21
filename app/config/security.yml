@@ -1,0 +1,25 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+    encoders:
+        Anaxago\CoreBundle\Entity\User:
+            algorithm: bcrypt
+
+    providers:
+        anaxago_provider:
+            entity:
+                class: AnaxagoCoreBundle:User
+                property: username
+                # if you're using multiple entity managers
+                # manager_name: customer
+
+    firewalls:
+        main:
+            provider: anaxago_provider
+            anonymous: ~
+            form_login:
+                login_path: login
+                check_path: login
+            logout:
+                path:   /logout
+                target: /

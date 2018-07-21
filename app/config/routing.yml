@@ -1,0 +1,14 @@
+anaxago_core:
+    resource: "@AnaxagoCoreBundle/Resources/config/routing.yml"
+    prefix:   /
+
+login:
+    path: /login
+    defaults: { _controller: AnaxagoCoreBundle:Security:login }
+
+logout:
+    path: /logout
+
+anaxago_core_registration:
+    path: /register
+    defaults: { _controller: AnaxagoCoreBundle:Security:registration }
