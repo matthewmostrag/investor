@@ -82,4 +82,19 @@ class ProjectController extends Controller
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * Archive the given project.
+     */
+    public function destroyAction(Project $project): Response
+    {
+        $project->archive();
+
+        $this->entityManager->persist($project);
+        $this->entityManager->flush();
+
+        $this->addFlash('info', "Le projet {$project->getTitle()} a bien été supprimé !");
+
+        return $this->redirectToRoute('anaxago_core_admin_index');
+    }
 }

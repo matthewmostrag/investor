@@ -52,6 +52,12 @@ class Project
      */
     private $description;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="archived", type="boolean")
+     */
+    private $archived = false;
 
     /**
      * Get id
@@ -133,6 +139,40 @@ class Project
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set the project archived status.
+     *
+     * @return Project
+     */
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
+
+        return $this;
+    }
+
+    /**
+     * Archive the project
+     *
+     * @return Project
+     */
+    public function archive()
+    {
+        $this->archived = true;
+
+        return $this;
+    }
+
+    /**
+     * Is the project archived?
+     *
+     * @return boolean
+     */
+    public function isArchived()
+    {
+        return $this->archived;
     }
 }
 

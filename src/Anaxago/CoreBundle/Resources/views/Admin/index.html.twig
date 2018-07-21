@@ -3,6 +3,14 @@
 {% block body %}
     <section>
         <div class="container">
+            {% for message in app.flashes('info') %}
+                <div class="alert alert-primary alert-dismissible fade show mt-4" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
             <h1 class="my-5">Liste des projets</h1>
             <p><a href="{{ path('anaxago_core_admin_project_add') }}" class="btn btn-outline-primary btn-lg mb-4">Ajouter un projet</a></p>
             {% for project in projects %}
@@ -18,7 +26,7 @@
                                 {{ project.description }}
                             </p>
                             <a href="{{ path('anaxago_core_admin_project_edit', {project: project.id}) }}" class="btn btn-outline-primary">Modifier</a>
-                            <a href="#" class="btn btn-outline-danger">Supprimer</a>
+                            <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteProjectModal" data-project-delete-url="{{ path('anaxago_core_admin_project_destroy', {project: project.id}) }}" data-project-name="{{ project.title }}">Supprimer</a>
                         </div>
                     </div>
                 </div>
@@ -28,4 +36,44 @@
             {% endfor %}
         </div>
     </section>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteProjectModal" tabindex="-1" role="dialog" aria-labelledby="deleteProjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteProjectModalLabel">Supprimer le projet</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Êtes-vous sûr de vouloir supprimer le projet <mark id="modalProjectName"></mark> ? Si oui, il sera archivé.</p>
+                </div>
+                <div class="modal-footer">
+                    <form action="#" method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $('#deleteProjectModal').on('show.bs.modal', function (event) {
+            var modal = $(this);
+            var button = $(event.relatedTarget);
+            var projectDeleteUrl = button.data('project-delete-url');
+            var projectName = button.data('project-name');
+
+            modal.find('#modalProjectName').text(projectName);
+            modal.find('form').attr('action', projectDeleteUrl);
+        });
+    </script>
 {% endblock %}

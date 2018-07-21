@@ -10,3 +10,9 @@ anaxago_core_admin_project_edit:
     path: /projets/{project}/modifier
     defaults: { _controller: AnaxagoCoreBundle:Project:edit }
     requirements: { project: \d+ }
+
+anaxago_core_admin_project_destroy:
+    path: /projets/{project}
+    defaults: { _controller: AnaxagoCoreBundle:Project:destroy }
+    requirements: { project: \d+ }
+    methods: DELETE

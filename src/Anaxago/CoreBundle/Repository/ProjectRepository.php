@@ -2,6 +2,8 @@
 
 namespace Anaxago\CoreBundle\Repository;
 
+use Anaxago\CoreBundle\Entity\Project;
+
 /**
  * ProjectRepository
  *
@@ -10,4 +12,15 @@ namespace Anaxago\CoreBundle\Repository;
  */
 class ProjectRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Finds all projects (not archived).
+     *
+     * @return Project[].
+     */
+    public function findAll()
+    {
+        return $this->findBy([
+            'archived' => false
+        ]);
+    }
 }
