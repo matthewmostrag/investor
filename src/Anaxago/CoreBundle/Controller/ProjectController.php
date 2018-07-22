@@ -3,9 +3,11 @@
 namespace Anaxago\CoreBundle\Controller;
 use Anaxago\CoreBundle\Entity\Project;
 use Anaxago\CoreBundle\Form\Type\ProjectType;
+use Anaxago\CoreBundle\Service\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -34,7 +36,7 @@ class ProjectController extends Controller
     /**
      * Allow a admin to add a new project.
      */
-    public function createAction(Request $request): Response
+    public function createAction(Request $request, UploadService $uploadService): Response
     {
         $project = new Project();
 
@@ -47,6 +49,10 @@ class ProjectController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $file = $project->getCover();
+            $path = $uploadService->upload($file);
+            $project->setCover($path);
+
             $this->entityManager->persist($project);
             $this->entityManager->flush();
 
@@ -61,8 +67,13 @@ class ProjectController extends Controller
     /**
      * Allow and admin to edit an existing project.
      */
-    public function editAction(Project $project, Request $request): Response
+    public function editAction(Project $project, Request $request, UploadService $uploadService): Response
     {
+        // Convert the file stored path to a File instance for Symfony form.
+        $project->setCover(new File(
+            $this->getParameter('upload_directory') . '/' . $project->getCover()
+        ));
+
         $form = $this->createForm(ProjectType::class, $project);
         $form->add('save', SubmitType::class, [
             'label' => 'Modifier le projet',
@@ -72,6 +83,10 @@ class ProjectController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $file = $project->getCover();
+            $path = $uploadService->upload($file);
+            $project->setCover($path);
+
             $this->entityManager->persist($project);
             $this->entityManager->flush();
 

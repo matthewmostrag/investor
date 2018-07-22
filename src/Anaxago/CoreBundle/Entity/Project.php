@@ -60,6 +60,16 @@ class Project
     private $archived = false;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Image()
+     */
+    private $cover;
+
+    /**
      * Get id
      *
      * @return int
@@ -173,6 +183,28 @@ class Project
     public function isArchived()
     {
         return $this->archived;
+    }
+
+    /**
+     * Set the cover.
+     *
+     * @return Project
+     */
+    public function setCover($cover)
+    {
+        $this->cover = $cover;
+
+        return $this;
+    }
+
+    /**
+     * Get the cover.
+     *
+     * @return string
+     */
+    public function getCover()
+    {
+        return $this->cover;
     }
 }
 

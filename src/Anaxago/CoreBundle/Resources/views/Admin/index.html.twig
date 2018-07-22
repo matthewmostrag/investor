@@ -19,7 +19,7 @@
                 {% endif %}
                 <div class="col-md-4">
                     <div class="card">
-                        <img class="card-img-top" src="https://picsum.photos/360/240/?random" alt="project">
+                        <img class="card-img-top" src="{{ upload_directory ~ project.cover }}" width="360" height="240" alt="project">
                         <div class="card-body">
                             <h5>{{ project.title }}</h5>
                             <p class="card-text">
