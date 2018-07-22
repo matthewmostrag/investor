@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
+ * @ORM\Entity(repositoryClass="Anaxago\CoreBundle\Repository\UserRepository")
  */
 class User implements UserInterface
 {
@@ -74,6 +75,11 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $email;
+
+    /**
+     * @ORM\Column(type="string", unique=true)
+     */
+    private $apiKey;
 
     /**
      * @return int
@@ -276,5 +282,25 @@ class User implements UserInterface
     public function eraseCredentials(): void
     {
         $this->plainPassword = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApiKey()
+    {
+        return $this->apiKey;
+    }
+
+    /**
+     * @param mixed $apiKey
+     *
+     * @return User
+     */
+    public function setApiKey($apiKey): User
+    {
+        $this->apiKey = $apiKey;
+
+        return $this;
     }
 }

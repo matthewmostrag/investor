@@ -1,13 +1,13 @@
 <?php
 
-namespace Anaxago\CoreBundle\Controller;
+namespace Anaxago\CoreBundle\Controller\Api;
 
 use Anaxago\CoreBundle\Entity\Project;
 use Anaxago\CoreBundle\Service\InvestmentService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class InvestController extends Controller
 {
@@ -37,25 +37,36 @@ class InvestController extends Controller
     /**
      * Allow a user to invest in a project.
      */
-    public function storeAction(Request $request): Response
+    public function storeAction(Request $request): JsonResponse
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        $projectId = $request->get('project_id');
-        $project = $this->entityManager->getRepository(Project::class)->find($projectId);
+        $data = json_decode($request->getContent(), true);
 
-        $amount = $request->request->get('amount');
+        if (!isset($data['project_id'])) {
+            return new JsonResponse([
+                'error' => "Can't find project_id"
+            ], 400);
+        }
+
+        if (!isset($data['amount'])) {
+            return new JsonResponse([
+                'error' => "Can't find amount"
+            ], 400);
+        }
+
+        $project = $this->entityManager->getRepository(Project::class)->find($data['project_id']);
+
+        $amount = $data['amount'];
 
         if ($amount > $project->getRemainingAmount()) {
-            $this->addFlash('danger', "Vous ne pouvez pas investir plus de {$project->getRemainingAmount()} dans le projet {$project->getTitle()} !");
-
-            return $this->redirectToRoute('anaxago_core_homepage');
+            return new JsonResponse([
+                'error' => "Can't invest more than {$project->getRemainingAmount()} in project {$project->getTitle()}."
+            ], 422);
         }
 
         $this->investmentService->saveNewInvestment($this->getUser(), $project, $amount);
 
-        $this->addFlash('success', 'Votre investissement a bien été pris en compte, merci !');
-
-        return $this->redirectToRoute('anaxago_core_homepage');
+        return new JsonResponse("{$amount} € invested successfully in project {$project->getTitle()}");
     }
 }

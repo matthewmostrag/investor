@@ -10,10 +10,16 @@ security:
             entity:
                 class: AnaxagoCoreBundle:User
                 property: username
-                # if you're using multiple entity managers
-                # manager_name: customer
+        api_key_provider:
+            id: Anaxago\CoreBundle\Security\ApiKeyUserProvider
 
     firewalls:
+        api:
+            pattern: ^/api
+            stateless: true
+            simple_preauth:
+                authenticator: Anaxago\CoreBundle\Security\ApiKeyAuthenticator
+            provider: api_key_provider
         main:
             provider: anaxago_provider
             anonymous: ~
@@ -27,3 +33,4 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/investir, roles: ROLE_USER }
+        - { path: ^/api, roles: ROLE_USER }
