@@ -16,3 +16,8 @@ anaxago_core_admin_project_destroy:
     defaults: { _controller: AnaxagoCoreBundle:Project:destroy }
     requirements: { project: \d+ }
     methods: DELETE
+
+anaxago_core_admin_project_investors:
+    path: /projects/{project}/investisseurs
+    defaults: { _controller: AnaxagoCoreBundle:Investors:index }
+    requirements: { project: \d+ }
