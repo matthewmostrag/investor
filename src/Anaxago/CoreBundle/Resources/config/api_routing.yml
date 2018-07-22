@@ -1,0 +1,3 @@
+anaxago_core_api_projects:
+    path: /projects
+    defaults: { _controller: AnaxagoCoreBundle:Api\Project:index }

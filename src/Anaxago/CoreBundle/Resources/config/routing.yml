@@ -10,3 +10,7 @@ anaxago_core_invest:
     path: /investir
     defaults: { _controller: AnaxagoCoreBundle:Invest:store }
     methods: POST
+
+anaxago_core_api:
+    resource: "@AnaxagoCoreBundle/Resources/config/api_routing.yml"
+    prefix:   /api
