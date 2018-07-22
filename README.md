@@ -1,32 +1,23 @@
-Anaxago symfony-starter-kit
+Investor
 ===================
 
 # Description
 
-Ce projet est un kit de démarage avec :
-- Symfony 3.4 minimum
-- php 7.1 minimum
+Cette plateforme permet de participer au financement de grands projets.
 
-La base de données contient deux tables :
-- user => pour la gestion et la connexion des utilisateurs 
-- project => pour la liste des projets
+La page d'accueil affiche les projets disponibles et leur état d'avancement.
+Pour investir il est nécessaire de se connecter. 
 
-Les données préchargés sont
-- pour les users 
+Pour cela, deux utilisateurs sont disponibles : 
 
 | email     | password    | Role |
 | ----------|-------------|--------|
 | john@local.com  | john   | ROLE_USER    |
 | admin@local.com | admin | ROLE_ADMIN   | 
 
- - une liste de 3 projets
- 
-La connexion et l'enregistrement des utilisateurs sont déjà configurés et opérationnels
-
+Une fois connecté en temps que simple utilisateur (`ROLE_USER`) il est possible d'investir dans un projet.
+Les administrateurs (`ROLE_ADMIN`) ont accès à un back office leur permettant d'ajouter, modifier et supprimer les projets.
 
 # Installation
 - ```composer install```
 - ```composer init-db ```
-
-    - Script personnalisé permet de créer la base de données, de lancer la création du schéma et de précharger les données
-    - Ce script peut être réutilisé pour ré-initialiser la base de données à son état initial à tout moment

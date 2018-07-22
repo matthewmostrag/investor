@@ -25,6 +25,10 @@
                         <td scope="row">{{ investment.user.fullName }}</td>
                         <td>{{ investment.amount|number_format(0, ',', ' ') }} &euro;</td>
                     </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">Aucun investisseur pour le moment.</td>
+                    </tr>
                 {% endfor %}
                 </tbody>
             </table>

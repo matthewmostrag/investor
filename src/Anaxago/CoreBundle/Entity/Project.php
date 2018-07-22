@@ -232,6 +232,8 @@ class Project
     public function setFundingLimit($fundingLimit)
     {
         $this->fundingLimit = $fundingLimit;
+
+        return $this;
     }
 
     /**
