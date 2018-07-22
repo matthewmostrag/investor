@@ -5,3 +5,8 @@ anaxago_core_homepage:
 anaxago_core_admin:
     resource: "@AnaxagoCoreBundle/Resources/config/admin_routing.yml"
     prefix:   /admin
+
+anaxago_core_invest:
+    path: /investir
+    defaults: { _controller: AnaxagoCoreBundle:Invest:store }
+    methods: POST
