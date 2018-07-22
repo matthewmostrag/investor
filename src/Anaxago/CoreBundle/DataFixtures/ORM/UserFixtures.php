@@ -26,7 +26,7 @@ class UserFixtures extends Fixture
             ->setLastName('Doe')
             ->setEmail('john@local.com')
             ->setPlainPassword('john')
-            ->setApiKey(md5(uniqid()));
+            ->setApiKey('d60d8cef3e639757b70c08b56797e771');
 
         $admin = (new User())
             ->setFirstName('admin')
@@ -35,7 +35,7 @@ class UserFixtures extends Fixture
             // because we like security
             ->setPlainPassword('admin')
             ->addRoles('ROLE_ADMIN')
-            ->setApiKey(md5(uniqid()))
+            ->setApiKey('49a4bc6558987a595efbac4ada1e1021')
         ;
 
         $manager->persist($investor);
