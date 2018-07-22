@@ -70,6 +70,15 @@ class Project
     private $cover;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="funding_limit", type="integer")
+     *
+     * @Assert\Range(min=0)
+     */
+    private $fundingLimit;
+
+    /**
      * Get id
      *
      * @return int
@@ -205,6 +214,26 @@ class Project
     public function getCover()
     {
         return $this->cover;
+    }
+
+    /**
+     * Set the funding limit.
+     *
+     * @return Project
+     */
+    public function setFundingLimit($fundingLimit)
+    {
+        $this->fundingLimit = $fundingLimit;
+    }
+
+    /**
+     * Get the funding limit.
+     *
+     * @return int
+     */
+    public function getFundingLimit()
+    {
+        return $this->fundingLimit;
     }
 }
 
