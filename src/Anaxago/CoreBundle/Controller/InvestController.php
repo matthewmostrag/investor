@@ -19,11 +19,19 @@ class InvestController extends Controller
     private $entityManager;
 
     /**
+     * The mailer instance.
+     *
+     * @var \Swift_Mailer
+     */
+    private $mailer;
+
+    /**
      * InvestController constructor.
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, \Swift_Mailer $mailer)
     {
         $this->entityManager = $entityManager;
+        $this->mailer = $mailer;
     }
 
     /**
@@ -54,7 +62,7 @@ class InvestController extends Controller
     /**
      * Create and save a new investment for the given project.
      */
-    protected function saveNewInvestment(Project $project, int $amount): void
+    private function saveNewInvestment(Project $project, int $amount): void
     {
         $user = $this->getUser();
 
@@ -65,5 +73,32 @@ class InvestController extends Controller
 
         $this->entityManager->persist($investment);
         $this->entityManager->flush();
+
+        // Refresh the project to be sure to have all investments
+        $this->entityManager->refresh($project);
+
+        if ($project->isFunded()) {
+            $this->alertInvestors($project);
+        }
+    }
+
+    /**
+     * Send an email to all project investors to alert them that it has been funded.
+     */
+    private function alertInvestors(Project $project): void
+    {
+        $investorsAdresses = [];
+
+        /** @var Investment $investment */
+        foreach ($project->getInvestments() as $investment) {
+            $investorsAdresses[] = $investment->getUser()->getEmail();
+        }
+
+        $message = (new \Swift_Message('Projet financé !'))
+            ->setFrom('houra@investor.app')
+            ->setTo($investorsAdresses)
+            ->setBody("Le projet {$project->getTitle()} a été entièrement financé !");
+
+        $this->mailer->send($message);
     }
 }
