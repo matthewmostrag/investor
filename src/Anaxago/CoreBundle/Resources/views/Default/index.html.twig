@@ -3,13 +3,15 @@
 {% block body %}
     <section>
         <div class="container">
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
-                    {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show mt-4" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
             {% endfor %}
             <h1 class="my-5">Découvrez nos opportunités d'investissement</h1>
             {% for project in projects %}
@@ -24,8 +26,17 @@
                             <p class="card-text">
                                 {{ project.description }}
                             </p>
+                            <div class="progress">
+                                {% set progress = project.progress %}
+                                <div class="progress-bar {% if project.isFunded() %}bg-success{% endif %}" role="progressbar" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p><small>{{ project.investedAmount|number_format(0, ',', ' ') }} € / {{ project.fundingLimit|number_format(0, ',', ' ') }} €</small></p>
                             {% if is_granted('ROLE_USER') %}
-                                <a href="#" class="btn btn-outline-primary" data-toggle="modal" data-target="#investModal" data-project-name="{{ project.title }}" data-project-id="{{ project.id }}">Investir</a>
+                                {% if project.isFunded() %}
+                                    <button type="button" class="btn btn-success" disabled>Financé !</button>
+                                {% else %}
+                                    <a href="#" class="btn btn-outline-primary" data-toggle="modal" data-target="#investModal" data-project-name="{{ project.title }}" data-project-id="{{ project.id }}">Investir</a>
+                                {% endif %}
                             {% endif %}
                         </div>
                     </div>

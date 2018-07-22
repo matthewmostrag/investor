@@ -33,10 +33,18 @@ class InvestController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        $investment = $this->createNewInvestment($request);
+        $projectId = $request->get('project_id');
+        $project = $this->entityManager->getRepository(Project::class)->find($projectId);
 
-        $this->entityManager->persist($investment);
-        $this->entityManager->flush();
+        $amount = $request->request->get('amount');
+
+        if ($amount > $project->getRemainingAmount()) {
+            $this->addFlash('danger', "Vous ne pouvez pas investir plus de {$project->getRemainingAmount()} dans le projet {$project->getTitle()} !");
+
+            return $this->redirectToRoute('anaxago_core_homepage');
+        }
+
+        $this->saveNewInvestment($project, $amount);
 
         $this->addFlash('success', 'Votre investissement a bien été pris en compte, merci !');
 
@@ -44,20 +52,18 @@ class InvestController extends Controller
     }
 
     /**
-     * Create a new investment instance from the request.
+     * Create and save a new investment for the given project.
      */
-    protected function createNewInvestment(Request $request): Investment
+    protected function saveNewInvestment(Project $project, int $amount): void
     {
         $user = $this->getUser();
-
-        $projectId = $request->get('project_id');
-        $project = $this->entityManager->getRepository(Project::class)->find($projectId);
 
         $investment = new Investment();
         $investment->setUser($user);
         $investment->setProject($project);
-        $investment->setAmount($request->get('amount'));
+        $investment->setAmount($amount);
 
-        return $investment;
+        $this->entityManager->persist($investment);
+        $this->entityManager->flush();
     }
 }

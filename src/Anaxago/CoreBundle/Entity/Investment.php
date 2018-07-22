@@ -37,7 +37,7 @@ class Investment
      *
      * @var Project
      *
-     * @ORM\ManyToOne(targetEntity="Anaxago\CoreBundle\Entity\Project")
+     * @ORM\ManyToOne(targetEntity="Anaxago\CoreBundle\Entity\Project", inversedBy="investments")
      * @ORM\JoinColumn(nullable=false)
      */
     private $project;

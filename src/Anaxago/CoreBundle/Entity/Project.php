@@ -3,6 +3,7 @@
 namespace Anaxago\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -77,6 +78,13 @@ class Project
      * @Assert\Range(min=0)
      */
     private $fundingLimit;
+
+    /**
+     * @var PersistentCollection
+     *
+     * @ORM\OneToMany(targetEntity="Anaxago\CoreBundle\Entity\Investment", mappedBy="project")
+     */
+    private $investments;
 
     /**
      * Get id
@@ -234,6 +242,52 @@ class Project
     public function getFundingLimit()
     {
         return $this->fundingLimit;
+    }
+
+    /**
+     * Get all investments on this project.
+     */
+    public function getInvestments(): PersistentCollection
+    {
+        return $this->investments;
+    }
+
+    /**
+     * Get the amount invested in the project.
+     */
+    public function getInvestedAmount(): int
+    {
+        $investedAmount = 0;
+
+        foreach ($this->investments as $investment) {
+            $investedAmount += $investment->getAmount();
+        }
+
+        return $investedAmount;
+    }
+
+    /**
+     * What's the remaining amount for the project to be funded?
+     */
+    public function getRemainingAmount(): int
+    {
+        return $this->fundingLimit - $this->getInvestedAmount();
+    }
+
+    /**
+     * Get the investment progress (in percentage).
+     */
+    public function getProgress(): int
+    {
+        return $this->getInvestedAmount() * 100 / $this->fundingLimit;
+    }
+
+    /**
+     * Has the project reached to funding limit?
+     */
+    public function isFunded(): bool
+    {
+        return $this->getInvestedAmount() >= $this->fundingLimit;
     }
 }
 
